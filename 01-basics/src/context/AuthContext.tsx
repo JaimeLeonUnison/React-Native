@@ -12,6 +12,11 @@ interface AuthState {
 
     user?: User;
     isChecking: boolean;
+    isAuthenticated: boolean;
+
+    //Methods
+    loginWithEmailPassword: (email:string, password:string) => void;
+    logout: () => void; 
 }
 
 interface User {
@@ -25,7 +30,8 @@ export const useAuthContext = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
 
-    const [status, setStatus] = useState(AuthStatus.checking);	
+    const [status, setStatus] = useState(AuthStatus.checking);
+    const [user, setUser] = useState<User>()
 
 useEffect(() => {
     setTimeout(() => {
@@ -33,13 +39,34 @@ useEffect(() => {
     }, 1500);
 }, []);
 
+
+const loginWithEmailPassword = (email: string, password: string) => {
+
+    setUser({
+        name: 'Jaime León',
+        email: email,
+    });
+    setStatus(AuthStatus.authenticated);
+};
+
+const logout = () => {
+    setUser(undefined);
+    setStatus(AuthStatus.notAuthenticated)
+}
+
     return (
         <AuthContext.Provider 
         value={{
             status: status,
+            user: user,
 
             //Getter
             isChecking: status === AuthStatus.checking,
+            isAuthenticated: status === AuthStatus.authenticated,
+            logout,
+
+            //Method
+            loginWithEmailPassword,
         }}
         >
             {children}
