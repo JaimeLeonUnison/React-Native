@@ -6,15 +6,13 @@ import { useUsers } from '../hooks/useUsers';
 
 export const UsersPage = () => {
 
-  const { users } = useUsers();
+  const { users, nextPage, prevPage } = useUsers();
 
 
   console.log(users);
 
   return (
     <>
-    <h3>Usuarios: </h3>
-
     <table className="w-[500px] bg-black rounded-xl text-white">
         <thead>
             <tr>
@@ -24,13 +22,24 @@ export const UsersPage = () => {
             </tr>
         </thead>
         <tbody>
-           <UserRow />
+          {users.map((user) => (
+              <UserRow key={user.id} user = {user}/>
+            )
+          )}
         </tbody>
     </table>
 
     <div className="flex justify-between w-[500px] mt-2">
-        <button className="p-2 bg-blue-500 text-white rounded-[5px]">Anteriores</button>
-        <button className="p-2 bg-blue-500 text-white rounded-[5px]">Siguientes</button>
+        <button 
+        onClick = {prevPage}
+        className="p-2 bg-blue-500 text-white rounded-[5px]">
+          Anteriores
+          </button>
+        <button
+        onClick = {nextPage} 
+        className="p-2 bg-blue-500 text-white rounded-[5px]">
+          Siguientes
+        </button>
     </div>
     </>
   )
